@@ -46,6 +46,9 @@ A full configuration file could look as follows:
   "name": "BigCo.Templates.Sample",
   "target": "dist",
   "framework": "netstandard1.3",
+  "description": "My project description",
+  "author": "BigCo",
+  "version": "1.2.3",
   "sources": [
     {
       "placeholder": "%([A-Za-z]{1,32})%",
@@ -67,6 +70,8 @@ A full configuration file could look as follows:
     }
   ]
 ```
+
+The `parameter` accepts values such as `none` (default), `file`, `directory`, and `extension`. It pretty much determines if some internal grouping should be done before writing out files. A grouping of `file` would group in such a way that files in the same directory are collected and the name of the file needs to be used as a parameter.
 
 ## License
 

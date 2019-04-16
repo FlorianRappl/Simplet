@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -7,7 +7,7 @@
     <ToolCommandName>simplet</ToolCommandName>
     <PackageOutputPath>../dist</PackageOutputPath>
     <RootNamespace>Simplet</RootNamespace>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
     <Authors>Florian Rappl</Authors>
     <PackageId>Simplet</PackageId>
     <Product>Simplet</Product>
@@ -19,6 +19,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>simple,templating,template,engine,converter,generator,tool,dotnet</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>

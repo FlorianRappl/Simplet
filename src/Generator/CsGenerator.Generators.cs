@@ -6,15 +6,28 @@ namespace Simplet.Generator
 
     internal partial class CsGenerator : IGenerator
     {
+        private static IGeneratedFile GenerateInterfaces(SimpletOptions options, IEnumerable<string> interfaceProperties)
+        {
+            var content = string.Join(string.Empty, interfaceProperties.Select(propName => $@"
+    public interface {propName.ToCsharpInterface()}
+    {{
+       string {propName} {{ get; set; }}
+    }}
+"));
+            return new TextFile($"AllInterfaces.cs", $@"namespace {options.ProjectName}
+{{{content}}}");
+        }
+
         private static IGeneratedFile GenerateModel(SimpletOptions options, TemplateOptions source, string cls, IDictionary<string, string> idents)
         {
+            var ifs = string.Join(", ", idents.Select(m => m.Value.ToCsharpInterface()));
             var properties = string.Join(string.Empty, idents.Select(m => $@"
         /// <summary>Gets or sets the value for replacing '{m.Key}'.</summary>
         public string {m.Value} {{ get; set; }}
 "));
             return new TextFile($"{cls}.cs", $@"namespace {source.Namespace ?? options.ProjectName}
 {{
-    public class {cls}
+    public class {cls} : {ifs}
     {{{properties}    }}
 }}");
         }

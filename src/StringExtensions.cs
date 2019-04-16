@@ -138,6 +138,8 @@ namespace Simplet
             return Regex.Replace(pascal, "[A-Z]{2,}", m => m.Value.ToTitle());
         }
 
+        public static string ToCsharpInterface(this string ident) => $"IHave{ident}";
+
         private static void AppendIdent(this StringBuilder sb, char c)
         {
             if (char.IsLetter(c) || char.IsNumber(c) || c == '_')

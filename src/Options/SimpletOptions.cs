@@ -19,6 +19,15 @@ namespace Simplet.Options
         [JsonRequired]
         public List<TemplateOptions> Sources { get; set; } = new List<TemplateOptions>();
 
+        [JsonProperty("description")]
+        public string Description { get; set; } = string.Empty;
+
+        [JsonProperty("author")]
+        public string Author { get; set; } = string.Empty;
+
+        [JsonProperty("version")]
+        public string Version { get; set; } = null;
+
         public static SimpletOptions ReadFrom(string path)
         {
             var serializer = new JsonSerializer();

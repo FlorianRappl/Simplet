@@ -13,6 +13,7 @@ namespace Simplet.Generator
         public IEnumerable<IGeneratedFile> Generate(SimpletOptions options)
         {
             var cwd = Environment.CurrentDirectory;
+            var interfaceProperties = new HashSet<string>();
             var allFiles = Directory.GetFiles(cwd, "*", SearchOption.AllDirectories)
                 .Select(m => m.Remove(0, cwd.Length + 1))
                 .ToArray();
@@ -38,10 +39,14 @@ namespace Simplet.Generator
                     var templateCls = name + "Template";
                     var result = GetTemplates(group, fileMapping, findPlaceholders);
 
+                    interfaceProperties.UnionWith(result.Identifiers.Select(m => m.Value));
+
                     yield return GenerateModel(options, source, modelCls, result.Identifiers);
                     yield return GenerateTemplate(options, source, modelCls, templateCls, result.Templates);
                 }
             }
+
+            yield return GenerateInterfaces(options, interfaceProperties);
         }
 
         private struct TemplateResult
