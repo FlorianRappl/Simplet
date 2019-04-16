@@ -53,7 +53,7 @@ namespace Simplet.Generator
                 parameters.Add(!string.IsNullOrEmpty(type) ? $"string {type}" : "");
                 var cases = templates.Select(m => $@"
                 case ""{m.Key.ToCsharpIdent(source.ParameterType)}"":
-                    return $@""{m.Value}"";
+                    return new {templateCls}($@""{m.Value}"");
 ");
                 templateImpl = $@"switch ({type})
             {{{string.Join(string.Empty, cases)}                    }}
@@ -62,14 +62,14 @@ namespace Simplet.Generator
 
             var templateParameter = string.Join(", ", parameters);
             var templateArguments = string.Join(", ", parameters.Select(m => m.Split(' ').Last()));
-            var result = hasSections ? $@"new {templateCls}(GetTemplate({templateArguments}))" : $"GetTemplate({templateArguments})";
+            var result = $"GetTemplate({templateArguments})";
 
             var lines = new List<string>
             {
                 $@"
         public static {response} Default({templateParameter}) => {result};
 
-        private static string GetTemplate({templateParameter})
+        private static {response} GetTemplate({templateParameter})
         {{
             {templateImpl}
         }}
@@ -78,13 +78,20 @@ namespace Simplet.Generator
 
             if (!string.IsNullOrEmpty(type))
             {
+                var identStrings = new List<string>();
+
                 foreach (var key in templates.Keys)
                 {
                     var ident = key.ToCsharpIdent(source.ParameterType);
                     lines.Add($@"
         public static {response} {ident}({parameters.First()}) => {result.Replace(type, $"\"{ident}\"")};
 ");
+                    identStrings.Add($"\"{ident}\"");
                 }
+
+                lines.Add($@"
+        public static string[] AvailableTypes => new [] {{ {string.Join(", ", identStrings)} }};
+");
             }
 
             if (hasSections)
