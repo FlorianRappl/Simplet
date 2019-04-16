@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>simplet</ToolCommandName>
+    <PackageOutputPath>../dist</PackageOutputPath>
+    <RootNamespace>Simplet</RootNamespace>
+    <Version>0.1.0</Version>
+    <Authors>Florian Rappl</Authors>
+    <PackageId>Simplet</PackageId>
+    <Product>Simplet</Product>
+    <Description>A simple templating engine to generate valid C# classes from static text files.</Description>
+    <Copyright>(c) 2019, Florian Rappl</Copyright>
+    <PackageLicenseUrl>https://github.com/FlorianRappl/Simplet/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/FlorianRappl/Simplet</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/FlorianRappl/Simplet</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>simple,templating,template,engine,converter,generator,tool,dotnet</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DotNet.Glob" Version="3.0.5" />
+    <PackageReference Include="Microsoft.Extensions.FileSystemGlobbing" Version="2.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+  </ItemGroup>
+
+</Project>
