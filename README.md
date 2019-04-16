@@ -1,9 +1,9 @@
 # Simplet - .NET Template Bundler
 
-[![Build Status](https://florianrappl.visualstudio.com/Simplet/_apis/build/status/Simplet-CI?branchName=master)](https://florianrappl.visualstudio.com/Simplet/_build/latest?definitionId=6&branchName=master)
+[![Build Status](https://florianrappl.visualstudio.com/Simplet/_apis/build/status/Simplet-CI?branchName=master)](https://florianrappl.visualstudio.com/Simplet/_build/latest?definitionId=10&branchName=master)
 [![GitHub Tag](https://img.shields.io/github/tag/FlorianRappl/Simplet.svg?style=flat-square)](https://github.com/FlorianRappl/Simplet/releases)
 [![NuGet Count](https://img.shields.io/nuget/dt/Simplet.svg?style=flat-square)](https://www.nuget.org/packages/Simplet/)
-[![Issues Open](https://img.shields.io/github/issues/FlorianRappl/Simplet.svg?style=flat-square)](https://github.comFlorianRappl/Simplet/issues)
+[![Issues Open](https://img.shields.io/github/issues/FlorianRappl/Simplet.svg?style=flat-square)](https://github.com/FlorianRappl/Simplet/issues)
 
 A simple templating engine to generate valid C# classes from static text files. Convert your text files into code that can be checked at compile-time.
 
