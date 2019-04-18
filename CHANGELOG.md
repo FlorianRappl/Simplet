@@ -1,5 +1,10 @@
 # Simplet Changelog
 
+## 0.3.0
+
+- Fixed environment variable for auto version
+- Added common interface for sections
+
 ## 0.2.1
 
 - Fixed a bug with undefined sections

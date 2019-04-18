@@ -52,6 +52,7 @@ A full configuration file could look as follows:
   "sources": [
     {
       "placeholder": "%([A-Za-z]{1,32})%",
+      "name": "MyTemplate",
       "includes": [
         "templates/**/*.html"
       ],

@@ -6,6 +6,13 @@ namespace Simplet.Options
     public class TemplateOptions
     {
         /// <summary>
+        /// Gets or sets the optional name of the given templates. Used
+        /// to derive the common interface, if necessary.
+        /// </summary>
+        [JsonProperty("name")]
+        public string TemplateName { get; set; } = null;
+
+        /// <summary>
         /// Gets or sets the placeholder format. Must be a regular expression.
         /// The regular expression has to contain a single group (name of the
         /// placeholder).

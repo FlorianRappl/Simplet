@@ -14,6 +14,7 @@ namespace Simplet.Generator
         {
             var cwd = Environment.CurrentDirectory;
             var interfaceProperties = new HashSet<string>();
+            var templateId = 1;
             var allFiles = Directory.GetFiles(cwd, "*", SearchOption.AllDirectories)
                 .Select(m => m.Remove(0, cwd.Length + 1))
                 .ToArray();
@@ -24,12 +25,21 @@ namespace Simplet.Generator
                 var glob = new GlobMatcher(source.IncludePaths, source.ExcludePaths);
                 var files = allFiles.Where(file => glob.IsIncluded(file)).ToArray();
                 var commonStart = files.FindCommonStart();
+                var sourceName = string.Empty;
 
                 var fileMapping = files.ToDictionary(
                     file => file.RemoveCommon(commonStart),
                     file => new TemplateInspector(File.ReadAllText(file))
                 );
+
                 var groups = fileMapping.Keys.Segmentize(source.ParameterType);
+
+                if (source.Sections.Any())
+                {
+                    var ident = (source.TemplateName ?? $"Template_{templateId++}").ToCsharpIdent();
+                    sourceName = $"I{ident}";
+                    yield return GenerateTemplateInterface(options, source, sourceName);
+                }
 
                 foreach (var group in groups)
                 {
@@ -42,11 +52,11 @@ namespace Simplet.Generator
                     interfaceProperties.UnionWith(result.Identifiers.Select(m => m.Value));
 
                     yield return GenerateModel(options, source, modelCls, result.Identifiers);
-                    yield return GenerateTemplate(options, source, modelCls, templateCls, result.Templates);
+                    yield return GenerateTemplate(options, source, modelCls, templateCls, result.Templates, sourceName);
                 }
             }
 
-            yield return GenerateInterfaces(options, interfaceProperties);
+            yield return GeneratePropertyInterfaces(options, interfaceProperties);
         }
 
         private struct TemplateResult

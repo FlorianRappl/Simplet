@@ -6,7 +6,7 @@ namespace Simplet.Generator
 
     internal partial class CsGenerator : IGenerator
     {
-        private static IGeneratedFile GenerateInterfaces(SimpletOptions options, IEnumerable<string> interfaceProperties)
+        private static IGeneratedFile GeneratePropertyInterfaces(SimpletOptions options, IEnumerable<string> interfaceProperties)
         {
             var content = string.Join(string.Empty, interfaceProperties.Select(propName => $@"
     public interface {propName.ToCsharpInterface()}
@@ -16,6 +16,25 @@ namespace Simplet.Generator
 "));
             return new TextFile($"AllInterfaces.cs", $@"namespace {options.ProjectName}
 {{{content}}}");
+        }
+
+        private static IGeneratedFile GenerateTemplateInterface(SimpletOptions options, TemplateOptions source, string sourceIf)
+        {
+            var properties = new List<string>();
+
+            foreach (var section in source.Sections)
+            {
+                properties.Add($@"
+        string {section.Title.ToCsharpIdent()} {{ get; }}
+");
+            }
+
+            var content = string.Join(string.Empty, properties);
+            return new TextFile($"{sourceIf}.cs", $@"namespace {options.ProjectName}
+{{
+    public interface {sourceIf}
+    {{{content}    }}
+}}");
         }
 
         private static IGeneratedFile GenerateModel(SimpletOptions options, TemplateOptions source, string cls, IDictionary<string, string> idents)
@@ -32,13 +51,14 @@ namespace Simplet.Generator
 }}");
         }
 
-        private static IGeneratedFile GenerateTemplate(SimpletOptions options, TemplateOptions source, string modelCls, string templateCls, Dictionary<string, string> templates)
+        private static IGeneratedFile GenerateTemplate(SimpletOptions options, TemplateOptions source, string modelCls, string templateCls, Dictionary<string, string> templates, string sourceIf)
         {
             var hasSections = source.Sections.Any();
             var type = source.ParameterType != TemplateParameterType.None ? "type" : "";
             var templateImpl = "return null;";
             var isStatic = hasSections ? "sealed" : "static";
             var response = hasSections ? templateCls : "string";
+            var resInterface = string.IsNullOrEmpty(sourceIf) ? "" : $" : {sourceIf}";
             var parameters = new List<string>
             {
                 $"{modelCls} model",
@@ -121,7 +141,7 @@ namespace Simplet.Generator
             
             return new TextFile($"{templateCls}.cs", $@"namespace {source.Namespace ?? options.ProjectName}
 {{
-    public {isStatic} class {templateCls}
+    public {isStatic} class {templateCls}{resInterface}
     {{{string.Join(string.Empty, lines)}    }}
 }}");
         }

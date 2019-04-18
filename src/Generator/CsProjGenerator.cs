@@ -1,8 +1,8 @@
 namespace Simplet.Generator
 {
-    using System;
     using System.Collections.Generic;
     using Simplet.Options;
+    using static Simplet.Utils.VersionUtils;
 
     internal class CsProjGenerator : IGenerator
     {
@@ -32,19 +32,5 @@ namespace Simplet.Generator
             )
         };
 
-        private static string GetVersion(string version)
-        {
-            switch (version)
-            {
-                case "":
-                case "auto":
-                case null:
-                    return GetAutoVersion();
-                default:
-                    return version;
-            }
-        }
-
-        private static string GetAutoVersion() => $"1.0.0-pre.{DateTime.Now.ToString("yyyy.M.d")}.{Environment.GetEnvironmentVariable("Build.BuildId") ?? "0"}";
     }
 }

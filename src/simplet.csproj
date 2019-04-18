@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -7,14 +7,14 @@
     <ToolCommandName>simplet</ToolCommandName>
     <PackageOutputPath>../dist</PackageOutputPath>
     <RootNamespace>Simplet</RootNamespace>
-    <Version>0.2.1</Version>
+    <Version>0.3.0</Version>
     <Authors>Florian Rappl</Authors>
     <PackageId>Simplet</PackageId>
     <Product>Simplet</Product>
     <Description>A simple templating engine to generate valid C# classes from static text files.</Description>
     <Copyright>(c) 2019, Florian Rappl</Copyright>
-    <PackageLicenseUrl>https://github.com/FlorianRappl/Simplet/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/FlorianRappl/Simplet</PackageProjectUrl>
+    <License>MIT</License>
     <RepositoryUrl>https://github.com/FlorianRappl/Simplet</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>simple,templating,template,engine,converter,generator,tool,dotnet</PackageTags>
