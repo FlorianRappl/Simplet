@@ -27,6 +27,14 @@ namespace Simplet.Generator
     <PackageOutputPath>./</PackageOutputPath>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove=""File1.txt"" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include=""File1.txt"" />
+  </ItemGroup>
+
 </Project>
 "
             )

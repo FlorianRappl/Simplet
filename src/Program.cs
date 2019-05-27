@@ -49,8 +49,8 @@ namespace Simplet
             var dirInfo = Directory.CreateDirectory(options.TargetDirectory);
             var generators = new IGenerator[]
             {
-                    new CsProjGenerator(),
-                    new CsGenerator(),
+                new CsProjGenerator(),
+                new CsGenerator(),
             };
             return generators.SelectMany(g => g.Generate(options).Select(f => new FullPathFile(dirInfo, f)));
         }

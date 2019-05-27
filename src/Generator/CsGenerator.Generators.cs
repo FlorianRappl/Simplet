@@ -1,5 +1,6 @@
 namespace Simplet.Generator
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Simplet.Options;
@@ -58,6 +59,7 @@ namespace Simplet.Generator
             var templateImpl = "return null;";
             var isStatic = hasSections ? "sealed" : "static";
             var response = hasSections ? templateCls : "string";
+            var headerImpl = string.Empty;
             var resInterface = string.IsNullOrEmpty(sourceIf) ? "" : $" : {sourceIf}";
             var parameters = new List<string>
             {
@@ -71,11 +73,15 @@ namespace Simplet.Generator
             else
             {
                 parameters.Add(!string.IsNullOrEmpty(type) ? $"string {type}" : "");
-                var cases = templates.Select(m => $@"
+                var (individual, common) = templates.Optimize();
+                var decls = common.Select(m => $@"var {m.Key} = $@""{m.Value}"";");
+                var cases = individual.Select(m => $@"
                 case ""{m.Key.ToCsharpIdent(source.ParameterType)}"":
                     return new {templateCls}($@""{m.Value}"");
 ");
-                templateImpl = $@"switch ({type})
+                templateImpl = $@"{string.Join(Environment.NewLine, decls)}
+
+            switch ({type})
             {{{string.Join(string.Empty, cases)}                    }}
             return null;";
             }
@@ -91,6 +97,7 @@ namespace Simplet.Generator
 
         private static {response} GetTemplate({templateParameter})
         {{
+            {headerImpl}
             {templateImpl}
         }}
 ",
