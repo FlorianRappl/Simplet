@@ -1,5 +1,9 @@
 # Simplet Changelog
 
+## 0.3.1
+
+- Optimized common head / tail
+
 ## 0.3.0
 
 - Fixed environment variable for auto version
