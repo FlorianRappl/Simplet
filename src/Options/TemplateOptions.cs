@@ -13,6 +13,14 @@ namespace Simplet.Options
         public string TemplateName { get; set; } = null;
 
         /// <summary>
+        /// Gets or sets if resource strings should be used instead of
+        /// normal string literals. This is preferred in order to avoid
+        /// breaking with error CS1566.
+        /// </summary>
+        [JsonProperty("resource")]
+        public bool UseResourceString { get; set; } = true;
+
+        /// <summary>
         /// Gets or sets the placeholder format. Must be a regular expression.
         /// The regular expression has to contain a single group (name of the
         /// placeholder).

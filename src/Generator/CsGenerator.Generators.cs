@@ -3,10 +3,13 @@ namespace Simplet.Generator
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.RegularExpressions;
     using Simplet.Options;
 
     internal partial class CsGenerator : IGenerator
     {
+        private static readonly Regex _captureVariables = new Regex("(?<!{){(?<name>[^{]+)}(?!})", RegexOptions.ExplicitCapture | RegexOptions.Compiled);
+
         private static IGeneratedFile GeneratePropertyInterfaces(SimpletOptions options, IEnumerable<string> interfaceProperties)
         {
             var content = string.Join(string.Empty, interfaceProperties.Select(propName => $@"
@@ -54,6 +57,7 @@ namespace Simplet.Generator
 
         private static IGeneratedFile GenerateTemplate(SimpletOptions options, TemplateOptions source, string modelCls, string templateCls, Dictionary<string, string> templates, string sourceIf)
         {
+            var resources = new Dictionary<string, string>();
             var hasSections = source.Sections.Any();
             var type = source.ParameterType != TemplateParameterType.None ? "type" : "";
             var templateImpl = "return null;";
@@ -69,6 +73,34 @@ namespace Simplet.Generator
             if (string.IsNullOrEmpty(type))
             {
                 templateImpl = $@"return $@""{templates.Values.Single()}"";";
+            }
+            else if (source.UseResourceString)
+            {
+                parameters.Add(!string.IsNullOrEmpty(type) ? $"string {type}" : "");
+                var cases = templates.Select(m =>
+                {
+                    var pt = m.Key.ToCsharpIdent(source.ParameterType);
+                    var value = m.Value;
+                    var args = new List<string>();
+                    var matches = _captureVariables.Matches(value);
+
+                    foreach (var match in matches.Reverse())
+                    {
+                        var group = match.Groups[1];
+                        args.Insert(0, group.Value);
+                        value = $"{value.Substring(0, group.Index)}{matches.Count - args.Count}{value.Substring(group.Index + group.Length)}"; 
+                    }
+
+                    var name = $"{templateCls}_{pt}.txt";
+                    resources.Add(name, value.Replace("\"\"", "\""));
+                    return $@"
+                case ""{pt}"":
+                    return new {templateCls}(string.Format(""{name}"".GetManifestResourceString(), {string.Join(", ", args)}));
+";
+                });
+                templateImpl = $@"switch ({type})
+            {{{string.Join(string.Empty, cases)}                    }}
+            return null;";
             }
             else
             {
@@ -146,11 +178,11 @@ namespace Simplet.Generator
                 }
             }
             
-            return new TextFile($"{templateCls}.cs", $@"namespace {source.Namespace ?? options.ProjectName}
+            return new TextClass($"{templateCls}.cs", $@"namespace {source.Namespace ?? options.ProjectName}
 {{
     public {isStatic} class {templateCls}{resInterface}
     {{{string.Join(string.Empty, lines)}    }}
-}}");
+}}", resources);
         }
     }
 }

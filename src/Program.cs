@@ -47,12 +47,17 @@ namespace Simplet
         {
             var options = SimpletOptions.ReadFrom(configPath);
             var dirInfo = Directory.CreateDirectory(options.TargetDirectory);
-            var generators = new IGenerator[]
+            var csGenerator = new CsGenerator();
+            var csFiles = csGenerator.Generate(options).ToArray();
+            var txtGenerator = new TxtGenerator(csFiles.OfType<IGeneratedClass>());
+            var txtFiles = txtGenerator.Generate(options);
+            var csprojGenerator = new CsProjGenerator();
+            var csprojFiles = csprojGenerator.Generate(options);
+
+            foreach (var file in csprojFiles.Concat(txtFiles.Concat(csFiles)))
             {
-                new CsProjGenerator(),
-                new CsGenerator(),
-            };
-            return generators.SelectMany(g => g.Generate(options).Select(f => new FullPathFile(dirInfo, f)));
+                yield return new FullPathFile(dirInfo, file);
+            }
         }
 
         private static void PrintUsage()

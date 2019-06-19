@@ -23,18 +23,13 @@ namespace Simplet.Generator
     <Authors>{options.Author}</Authors>
     <Version>{GetVersion(options.Version)}</Version>
     <DocumentationFile>{options.ProjectName}.xml</DocumentationFile>
+    <RootNamespace>{options.ProjectName}</RootNamespace>
     <noWarn>1591,NU5105</noWarn>
     <PackageOutputPath>./</PackageOutputPath>
   </PropertyGroup>
-
   <ItemGroup>
-    <None Remove=""File1.txt"" />
+    <EmbeddedResource Include=""*.txt"" />
   </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include=""File1.txt"" />
-  </ItemGroup>
-
 </Project>
 "
             )

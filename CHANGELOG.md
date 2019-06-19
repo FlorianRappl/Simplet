@@ -1,8 +1,9 @@
 # Simplet Changelog
 
-## 0.3.1
+## 0.4.0
 
 - Optimized common head / tail
+- Introduced (default) resource string mode
 
 ## 0.3.0
 
